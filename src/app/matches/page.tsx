@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Swords, Calendar, Trophy, Clock } from 'lucide-react';
+import { Swords, Calendar, Trophy, Clock, Plus } from 'lucide-react';
+import Link from 'next/link'; // <-- Added this import!
 
 // Define the shape of our complex joined data
 interface Match {
@@ -34,12 +35,25 @@ export default function MatchesPage() {
   return (
     <div className="p-8">
       <div className="max-w-5xl mx-auto">
-        <header className="mb-8 border-b border-slate-800 pb-6">
-          <h1 className="text-4xl font-bold tracking-tight text-white flex items-center gap-3">
-            <Swords className="text-red-500 h-8 w-8" />
-            Match Schedule & Results
-          </h1>
-          <p className="text-slate-400 mt-2">Track upcoming fixtures and past tournament results.</p>
+        
+        {/* UPDATED HEADER: Flexbox added to push button to the right */}
+        <header className="mb-8 border-b border-slate-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight text-white flex items-center gap-3">
+              <Swords className="text-red-500 h-8 w-8" />
+              Match Schedule & Results
+            </h1>
+            <p className="text-slate-400 mt-2">Track upcoming fixtures and past tournament results.</p>
+          </div>
+          
+          {/* THE NEW BUTTON */}
+          <Link 
+            href="/matches/new"
+            className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 shrink-0"
+          >
+            <Plus className="h-5 w-5" />
+            Schedule Match
+          </Link>
         </header>
 
         {loading ? (
