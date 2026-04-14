@@ -44,7 +44,7 @@ export default function PlayersPage() {
       </header>
 
       {loading ? <p className="text-slate-400">Loading players...</p> : (
-        <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
+        <div className="overflow-x-auto pb-4">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-950/50 border-b border-slate-800 text-slate-400 text-sm uppercase tracking-wider">
