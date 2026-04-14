@@ -123,7 +123,7 @@ export default function ScheduleMatch() {
               >
                 <option value="" disabled>Select Team...</option>
                 {teams.map(t => (
-                  <option key={t.team_id} value={t.team_id}>{t.name}</option>
+                  <option key={t.team_id} value={t.team_id}>{t.team_name}</option>
                 ))}
               </select>
             </div>
@@ -144,7 +144,7 @@ export default function ScheduleMatch() {
               >
                 <option value="" disabled>Select Team...</option>
                 {teams.map(t => (
-                  <option key={t.team_id} value={t.team_id}>{t.name}</option>
+                  <option key={t.team_id} value={t.team_id}>{t.team_name}</option>
                 ))}
               </select>
             </div>
