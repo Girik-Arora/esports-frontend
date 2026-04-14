@@ -18,11 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-950 text-slate-50 flex min-h-screen`}>
-        {/* Wrap everything in the AuthProvider */}
+      <body className={`${inter.className} bg-slate-950 text-slate-50 flex min-h-screen relative`}>
         <AuthProvider>
           <Sidebar />
-          <main className="flex-1 overflow-y-auto">
+          {/* ADDED: pt-16 for mobile spacing, min-w-0 to prevent flexbox blowouts */}
+          <main className="flex-1 overflow-y-auto w-full min-w-0 md:pt-0 pt-20 px-4 md:px-8">
             {children}
           </main>
         </AuthProvider>
