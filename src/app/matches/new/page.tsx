@@ -25,18 +25,20 @@ export default function ScheduleMatch() {
         const token = localStorage.getItem('token');
         const res = await fetch(`${API_URL}/teams`, {
           headers: {
-            'Authorization': `Bearer ${token}` // Added the passport!
+            'Authorization': `Bearer ${token}`
           }
         });
         
-        const data = await res.json();
+        const responseData = await res.json();
         
-        // Safeguard: Only set teams if the backend actually sent an array back
-        if (Array.isArray(data)) {
-          setTeams(data);
+        // UNWRAP THE PACKAGE: Check if teams are inside responseData.data, otherwise use responseData
+        const teamsArray = responseData.data ? responseData.data : responseData;
+        
+        if (Array.isArray(teamsArray)) {
+          setTeams(teamsArray);
         } else {
-          console.error("Failed to load teams. Backend returned:", data);
-          setTeams([]); // Keeps the app from crashing
+          console.error("Failed to load teams. Backend returned:", responseData);
+          setTeams([]);
         }
       } catch (err) {
         console.error("Failed to load teams", err);
