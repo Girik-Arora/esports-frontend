@@ -18,14 +18,29 @@ export default function ScheduleMatch() {
   const [error, setError] = useState('');
 
   // Fetch teams when the page loads so we can populate the dropdowns
+  // Fetch teams when the page loads so we can populate the dropdowns
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const res = await fetch(`${API_URL}/teams`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_URL}/teams`, {
+          headers: {
+            'Authorization': `Bearer ${token}` // Added the passport!
+          }
+        });
+        
         const data = await res.json();
-        setTeams(data);
+        
+        // Safeguard: Only set teams if the backend actually sent an array back
+        if (Array.isArray(data)) {
+          setTeams(data);
+        } else {
+          console.error("Failed to load teams. Backend returned:", data);
+          setTeams([]); // Keeps the app from crashing
+        }
       } catch (err) {
         console.error("Failed to load teams", err);
+        setTeams([]);
       }
     };
     fetchTeams();
