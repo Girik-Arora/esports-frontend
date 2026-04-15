@@ -92,9 +92,10 @@ export default function TeamsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* IMPORTANT: We now map over 'filteredTeams', NOT 'teams' */}
             {filteredTeams.map((team) => (
-              <div 
+              <Link 
+                href={`/teams/${team.team_id}`}
                 key={team.team_id} 
-                className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all flex flex-col items-center text-center"
+                className="bg-slate-900 border border-slate-800 rounded-xl p-6 hover:border-blue-500/50 transition-all flex flex-col items-center text-center cursor-pointer block group"
               >
                 <div className="h-16 w-16 bg-slate-800 rounded-full flex items-center justify-center mb-4 border-2 border-slate-700">
                   <Shield className="h-8 w-8 text-slate-400" />
@@ -119,7 +120,7 @@ export default function TeamsPage() {
                     <span className="font-medium text-white">{team.roster_size} Players</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}
