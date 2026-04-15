@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { User, Plus, Shield, Search } from 'lucide-react'; // <-- Added Search icon
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface Player {
   player_id: number;
@@ -18,8 +19,10 @@ export default function PlayersPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
   
+  
   // 1. New State for the Search Bar
   const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     axios.get('https://nexus-gg-api.onrender.com/api/players')
@@ -98,7 +101,12 @@ export default function PlayersPage() {
             <tbody className="divide-y divide-slate-800">
               {/* IMPORTANT: We now map over 'filteredPlayers', NOT 'players' */}
               {filteredPlayers.map((player, index) => (
-                <tr key={`${player.player_id}-${index}`} className="hover:bg-slate-800/50 transition-colors">
+                <tr 
+              key={`${player.player_id}-${index}`} 
+              onClick={() => router.push(`/players/${player.player_id}`)}
+              className="hover:bg-slate-800/80 transition-colors cursor-pointer group"
+            >
+              <td className="p-4 font-bold text-white text-lg group-hover:text-purple-400 transition-colors">{player.gamer_tag}</td>
                   <td className="p-4 font-bold text-white text-lg">{player.gamer_tag}</td>
                   <td className="p-4 text-slate-300">{player.real_name}</td>
                   <td className="p-4 text-slate-400">{player.country}</td>
