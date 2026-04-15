@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
-import { Swords, ArrowLeft, Trophy, Loader2 } from 'lucide-react';
+import { Swords, ArrowLeft, Trophy, Loader2, Trash2 } from 'lucide-react'; // <-- Added Trash2
 import Link from 'next/link';
 
 interface MatchDetails {
@@ -17,7 +17,7 @@ interface MatchDetails {
 
 export default function ScoreMatchPage() {
   const router = useRouter();
-  const params = useParams(); // Grabs the ID from the URL
+  const params = useParams();
   
   const [match, setMatch] = useState<MatchDetails | null>(null);
   const [selectedWinner, setSelectedWinner] = useState<number | null>(null);
@@ -51,14 +51,40 @@ export default function ScoreMatchPage() {
     }
   };
 
+  // THE NEW DELETE FUNCTION
+  const handleDelete = async () => {
+    if (!window.confirm('Are you absolute sure you want to cancel and delete this match?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`https://nexus-gg-api.onrender.com/api/matches/${params.id}`);
+      router.push('/matches'); // Kick them back to the main list after deleting
+    } catch (err) {
+      console.error('Failed to delete:', err);
+      alert('Error deleting match.');
+    }
+  };
+
   if (loading) return <div className="p-8 text-slate-400">Loading match details...</div>;
   if (!match) return <div className="p-8 text-red-400">Match not found.</div>;
 
   return (
     <div className="p-8 max-w-3xl mx-auto mt-6">
-      <Link href="/matches" className="text-slate-400 hover:text-white flex items-center gap-2 mb-6 transition-colors">
-        <ArrowLeft className="h-4 w-4" /> Back to Schedule
-      </Link>
+      
+      {/* Top Navigation Bar with Back Link AND Delete Button */}
+      <div className="flex justify-between items-center mb-6">
+        <Link href="/matches" className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Back to Schedule
+        </Link>
+        
+        <button 
+          onClick={handleDelete}
+          className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-2 rounded-lg transition-colors border border-red-500/20 text-sm font-medium"
+        >
+          <Trash2 className="h-4 w-4" /> Cancel Match
+        </button>
+      </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center">
         <div className="inline-flex h-16 w-16 bg-red-500/10 rounded-2xl items-center justify-center border border-red-500/20 mb-6">

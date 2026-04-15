@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'next/navigation';
-import { User, Shield, ArrowLeft, Calendar, Mail, MapPin, Trophy } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { User, Shield, ArrowLeft, Calendar, Mail, MapPin, Trophy, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
 
 export default function PlayerProfilePage() {
   const params = useParams();
+  const router = useRouter();
   const id = params.id;
 
   const [player, setPlayer] = useState<any>(null);
@@ -30,6 +31,21 @@ export default function PlayerProfilePage() {
       });
   }, [id]);
 
+  const handleDelete = async () => {
+    // Standard browser confirmation popup
+    if (!window.confirm('Are you absolute sure you want to permanently delete this player?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`https://nexus-gg-api.onrender.com/api/players/${id}`);
+      router.push('/players'); // Kick them back to the main list after deleting
+    } catch (err) {
+      console.error('Failed to delete:', err);
+      alert('Error deleting player.');
+    }
+  };
+
   if (loading) return <div className="p-8 text-slate-400 animate-pulse text-center mt-20">Accessing Nexus Database...</div>;
   if (error) return <div className="p-8 text-red-400 text-center mt-20">{error}</div>;
   if (!player) return <div className="p-8 text-slate-400 text-center mt-20">Player not found.</div>;
@@ -37,10 +53,19 @@ export default function PlayerProfilePage() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       
-      {/* Back Navigation */}
-      <Link href="/players" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8">
-        <ArrowLeft className="h-4 w-4" /> Back to Player Database
-      </Link>
+      {/* Top Navigation Bar with Back Link AND Delete Button */}
+      <div className="flex justify-between items-center mb-8">
+        <Link href="/players" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Back to Player Database
+        </Link>
+        
+        <button 
+          onClick={handleDelete}
+          className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 px-4 py-2 rounded-lg transition-colors border border-red-500/20 text-sm font-medium"
+        >
+          <Trash2 className="h-4 w-4" /> Delete Player
+        </button>
+      </div>
 
       {/* Hero Profile Card */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 mb-8 relative overflow-hidden shadow-2xl">
